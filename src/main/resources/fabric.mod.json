@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "libdp",
+  "version": "$version",
+
+  "name": "Lib Data Potential",
+  "icon": "assets/libdp/icon.png",
+  "description": "Unlocking the true potential of data packs",
+  "licence": "MIT",
+  "contact": {
+    "sources": "https://github.com/CottonMC/LibDP"
+  },
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.cottonmc.libdp.LibDP"
+    ],
+    "libdp": [
+      "io.github.cottonmc.libdp.DPContent"
+    ]
+  },
+  "mixins": [
+    "mixins.libdp.json"
+  ],
+  "accessWidener": "libdp.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.4.0"
+  },
+  "custom": {
+    "modmenu:api": true
+  }
+}

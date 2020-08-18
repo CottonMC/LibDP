@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "io.github.cottonmc.libdp.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinCookingRecipeSerializer",
+    "MixinCraftingInventory",
+    "MixinCraftingResultSlot",
+    "MixinCuttingRecipeSerializer",
+    "MixinIngredient",
+    "MixinPlayerScreenHandler",
+    "MixinRecipeManager",
+    "MixinResourceManagerImpl",
+    "ReferenceLootConditionAccessor"
+  ]
+}
