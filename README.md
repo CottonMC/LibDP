@@ -46,6 +46,37 @@ The `legacy` folder in this repo contains the contents of the legacy loot and re
 to LibDP ones. You are free to use them to create a legacy driver system for using the features removed from LibDP.
 Please keep in mind the packages on each of the files.
 
+## Sample Code (temporary)
+Here is a sample diskette using some of the features of LibDP custom recipes. It will be moved to the wiki eventually.
+
+```js
+var RecipeTweaker = diskette.require("libdp.recipe.RecipeDriver");
+
+//add a custom shaped recipe that lets you make a netherite pick without netherite - but for a price
+RecipeDriver.addShaped(libcd,
+    [["minecraft:soul_sand", "#minecraft:stone_tool_materials", "minecraft:soul_sand"],
+     ["",                    "minecraft:stick",                 ""],
+     ["",                    "minecraft:stick",                 ""]],
+    "minecraft:netherite_pickaxe"
+    );
+
+//make sure that the player has enough health to craft
+function matches(stacks, width, height, player, world) {
+    return player.getHealth() >= 20 || player.isCreative();
+}
+
+//set a custom-colored and non-italicized name
+function preview(stacks, width, height, player, output) {
+    return output.setFormattedName("{\"italic\":false,\"color\":\"#4A2A23\",\"text\":\"Souled Netherite Pickaxe\"}");
+}
+
+function craft(stacks, player, output) {
+    if (!player.isCreative()) {
+        player.damage(19);
+    }
+}
+```
+
 # What happened to LibCD?
 
 Long story short, drama happened. Tweakers caused a lot of drama, and when someone who had been causing me grief for a 
