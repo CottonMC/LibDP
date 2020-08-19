@@ -53,7 +53,7 @@ Here is a sample diskette using some of the features of LibDP custom recipes. It
 var RecipeTweaker = diskette.require("libdp.recipe.RecipeDriver");
 
 //add a custom shaped recipe that lets you make a netherite pick without netherite - but for a price
-RecipeDriver.addShaped(libcd,
+RecipeDriver.addShaped(diskette,
     [["minecraft:soul_sand", "#minecraft:stone_tool_materials", "minecraft:soul_sand"],
      ["",                    "minecraft:stick",                 ""],
      ["",                    "minecraft:stick",                 ""]],
