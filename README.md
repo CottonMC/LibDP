@@ -50,7 +50,7 @@ Please keep in mind the packages on each of the files.
 Here is a sample diskette using some of the features of LibDP custom recipes. It will be moved to the wiki eventually.
 
 ```js
-var RecipeTweaker = diskette.require("libdp.recipe.RecipeDriver");
+var RecipeDriver = diskette.require("libdp.recipe.RecipeDriver");
 
 //add a custom shaped recipe that lets you make a netherite pick without netherite - but for a price
 RecipeDriver.addShaped(diskette,
