@@ -6,16 +6,23 @@ import net.minecraft.world.World;
  * A wrapped view of a world, accessible outside of obfuscation.
  */
 public class WorldInfo {
-	private World world;
+	private final World world;
 
 	public WorldInfo(World world) {
 		this.world = world;
 	}
 
 	/**
-	 * @return Whether it's currently daytime or not.
+	 * @return Whether it's currently daytime or not, purely by time.
 	 */
 	public boolean isDay() {
+		return world.getTimeOfDay() >= 0 && world.getTimeOfDay() <= 12000;
+	}
+
+	/**
+	 * @return Whether it's daytime and not too cloudy to let light through.
+	 */
+	public boolean isSunnyDay() {
 		return world.isDay();
 	}
 
@@ -45,5 +52,12 @@ public class WorldInfo {
 	 */
 	public int getDifficulty() {
 		return world.getLevelProperties().getDifficulty().getId();
+	}
+
+	/**
+	 * @return The dimension of the world.
+	 */
+	public String getDimension() {
+		return world.getServer().getRegistryManager().getDimensionTypes().getId(world.getDimension()).toString();
 	}
 }

@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
  * A wrapper on player entities so they can be manipulated outside of obfuscation
  */
 public class WrappedPlayer {
-	private PlayerEntity player;
+	private final PlayerEntity player;
 
 	public WrappedPlayer(PlayerEntity player) {
 		this.player = player;
@@ -25,6 +25,27 @@ public class WrappedPlayer {
 	 */
 	public float getHealth() {
 		return player.getHealth();
+	}
+
+	/**
+	 * @return The current max health of the player.
+	 */
+	public float getMaxHealth() {
+		return player.getMaxHealth();
+	}
+
+	/**
+	 * @return The player's absorption.
+	 */
+	public float getAbsorption() {
+		return player.getAbsorptionAmount();
+	}
+
+	/**
+	 * @return The player's armor level.
+	 */
+	public int getArmor() {
+		return player.getArmor();
 	}
 
 	/**
@@ -63,10 +84,31 @@ public class WrappedPlayer {
 	}
 
 	/**
+	 * @return The player's luck.
+	 */
+	public float getLuck() {
+		return player.getLuck();
+	}
+
+	/**
+	 * @return The player's score.
+	 */
+	public int getScore() {
+		return player.getScore();
+	}
+
+	/**
 	 * @return Whether the player is in creative mode.
 	 */
 	public boolean isCreative() {
 		return player.isCreative();
+	}
+
+	/**
+	 * @return Whether the player is both in creative mode and an op (if they can use command blocks).
+	 */
+	public boolean isCreativeOp() {
+		return player.isCreativeLevelTwoOp();
 	}
 
 	/**
@@ -75,11 +117,6 @@ public class WrappedPlayer {
 	 */
 	public boolean damage(float amount) {
 		if (!player.world.isClient) return player.damage(CraftingDamageSource.INSTANCE, amount);
-		return false;
-	}
-
-	public boolean damage(int amount) {
-		if (!player.world.isClient) return player.damage(CraftingDamageSource.INSTANCE, (float)amount);
 		return false;
 	}
 

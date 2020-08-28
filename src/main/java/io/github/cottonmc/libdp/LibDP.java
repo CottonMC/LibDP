@@ -1,5 +1,7 @@
 package io.github.cottonmc.libdp;
 
+import java.nio.file.Files;
+
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.cottonmc.libdp.api.DriverInitializer;
 import io.github.cottonmc.libdp.api.driver.DriverManager;
@@ -11,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -28,15 +29,24 @@ public class LibDP implements ModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-	public static RecipeSerializer<CustomSpecialCraftingRecipe> CUSTOM_SPECIAL_SERIALIZER;
+	public static RecipeSerializer<CustomSpecialCraftingRecipe> CUSTOM_SPECIAL_SERIALIZER = new CustomSpecialCraftingRecipe.Serializer();
+
+	//if true, custom special recipes will not register their serializer and will lie about their identity during sync
+	//WARNING: CURRENTLY UNTESTED
+	public static boolean COMPATIBILITY_MODE = false;
 
 	@Override
 	public void onInitialize() {
+		//TODO: real config
+		COMPATIBILITY_MODE = Boolean.getBoolean("libdp.compat")
+				|| Files.exists(FabricLoader.getInstance().getConfigDir().resolve("libdp_compat_mode.txt"));
 		FabricLoader.getInstance().getEntrypoints(MODID, DriverInitializer.class).forEach(init ->
 				init.init(DriverManager.INSTANCE));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DisketteLoader());
-		CUSTOM_SPECIAL_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MODID,
-				"custom_special_crafting"), new SpecialRecipeSerializer<>(CustomSpecialCraftingRecipe::new));
+		if (!COMPATIBILITY_MODE) {
+			Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(MODID,
+					"custom_special_crafting"), CUSTOM_SPECIAL_SERIALIZER);
+		}
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			
 			//New nodes

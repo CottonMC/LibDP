@@ -5,18 +5,17 @@ import io.github.cottonmc.libdp.api.driver.DriverManager;
 import io.github.cottonmc.libdp.api.driver.StackFactory;
 import io.github.cottonmc.libdp.api.driver.recipe.RecipeParser;
 import io.github.cottonmc.libdp.api.util.MutableStack;
+import io.github.cottonmc.libdp.api.util.StackInfo;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
 /**
@@ -27,12 +26,53 @@ public class DriverUtils {
 
 	private DriverUtils() {}
 
+	/**
+	 * Create a new mutable stack with a size of 1.
+	 * @param item The name of the item for the stack.
+	 * @return A stack mutable by Diskettes.
+	 */
 	public MutableStack newStack(String item) {
 		return newStack(item, 1);
 	}
 
+	/**
+	 * Create a new mutable stack.
+	 * @param item The name of the item for the stack.
+	 * @param count The count of the stack.
+	 * @return A stack mutable by Diskettes.
+	 */
 	public MutableStack newStack(String item, int count) {
-		return new MutableStack(new ItemStack(getItem(item), count));
+		return new MutableStack(new ItemStack(getRawItem(item), count));
+	}
+
+	/**
+	 * Get the default item from an item tag.
+	 * @param id The ID of the tag to get from.
+	 * @return The string form of default item for that tag.
+	 */
+	public String getDefaultItem(String id) {
+		Identifier tagId = new Identifier(id);
+		Tag<Item> tag = ServerTagManagerHolder.getTagManager().getItems().getTag(tagId);
+		if (tag == null) return "minecraft:air";
+		return Registry.ITEM.getId(TagHelper.ITEM.getDefaultEntry(tag)).toString();
+	}
+
+	/**
+	 * Get the mutable form of a raw stack. For emergency use.
+	 * @param stack The stack to get from.
+	 * @return A form of the stack mutable by Diskettes.
+	 */
+	public MutableStack getMutableStack(ItemStack stack) {
+		return new MutableStack(stack);
+	}
+
+	/**
+	 * Get the immutable form of a raw stack. For emergency use.
+	 * @param stack The stack to get from.
+	 * @return A form of the stack readable but not mutable by Diskettes.
+	 */
+	public StackInfo getStackInfo(ItemStack stack) {
+		return new StackInfo(stack);
 	}
 
 	/**
@@ -40,29 +80,8 @@ public class DriverUtils {
 	 * @param id The id to search for.
 	 * @return The registered item, or Items.AIR if it doesn't exist.
 	 */
-	public Item getItem(String id) {
+	public Item getRawItem(String id) {
 		return Registry.ITEM.get(new Identifier(id));
-	}
-
-	/**
-	 * Get the default item from an item tag.
-	 * @param id The ID of the tag to get from.
-	 * @return The default item for that tag.
-	 */
-	public Item getDefaultItem(String id) {
-		Identifier tagId = new Identifier(id);
-		Tag<Item> tag = ServerTagManagerHolder.getTagManager().getItems().getTag(tagId);
-		if (tag == null) return Items.AIR;
-		return TagHelper.ITEM.getDefaultEntry(tag);
-	}
-
-	/**
-	 * Get the item from an item stack.
-	 * @param stack The stack to check.
-	 * @return The item of the stack.
-	 */
-	public Item getStackItem(ItemStack stack) {
-		return stack.getItem();
 	}
 
 	/**
@@ -70,7 +89,7 @@ public class DriverUtils {
 	 * @param id The id to search for.
 	 * @return The registered item, or Blocks.AIR if it doesn't exist.
 	 */
-	public Block getBlock(String id) {
+	public Block getRawBlock(String id) {
 		return Registry.BLOCK.get(new Identifier(id));
 	}
 
@@ -79,7 +98,7 @@ public class DriverUtils {
 	 * @param id The id to search for.
 	 * @return The registered fluid, or Fluids.EMPTY if it doesn't exist.
 	 */
-	public Fluid getFluid(String id) {
+	public Fluid getRawFluid(String id) {
 		return Registry.FLUID.get(new Identifier(id));
 	}
 
@@ -88,7 +107,7 @@ public class DriverUtils {
 	 * @param id The id to search for.
 	 * @return The registered entity, or EntityType.PIG if it doesn't exist.
 	 */
-	public EntityType<?> getEntity(String id) {
+	public EntityType<?> getRawEntity(String id) {
 		return Registry.ENTITY_TYPE.get(new Identifier(id));
 	}
 
@@ -97,21 +116,8 @@ public class DriverUtils {
 	 * @param id The id to search for.
 	 * @return The registered sound, or SoundEvents.ENTITY_ITEM_PICKUP if it doesn't exist.
 	 */
-	public SoundEvent getSound(String id) {
+	public SoundEvent getRawSound(String id) {
 		return Registry.SOUND_EVENT.get(new Identifier(id));
-	}
-
-	/**
-	 * Check if a DefaultedList (like the ones inventories use) is empty.
-	 * Necessary because DefaultedList stays within Collection<E> spec for once.
-	 * @param items The DefaultedList to check.
-	 * @return Whether all the item stacks in the list are empty or not.
-	 */
-	public boolean isItemListEmpty(DefaultedList<ItemStack> items) {
-		for (ItemStack stack : items) {
-			if (!stack.isEmpty()) return false;
-		}
-		return true;
 	}
 
 	/**

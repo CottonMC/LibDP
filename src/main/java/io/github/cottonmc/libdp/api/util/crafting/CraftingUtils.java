@@ -13,6 +13,11 @@ import net.minecraft.screen.ScreenHandler;
 import javax.annotation.Nullable;
 
 public class CraftingUtils {
+	/**
+	 * Obtain the player using this crafting inventory.
+	 * @param inventory The inventory being crafted in.
+	 * @return The player doing the crafting, if they exist.
+	 */
 	@Nullable
 	public static PlayerEntity findPlayer(CraftingInventory inventory) {
 		try {
@@ -29,10 +34,29 @@ public class CraftingUtils {
 		}
 	}
 
-	public static StackInfo[] getInvStacks(CraftingInventory inv) {
+	/**
+	 * @param inv The inventory being crafted in.
+	 * @return A 1D array of the stacks in the inventory.
+	 */
+	public static StackInfo[] getInvStacks1d(CraftingInventory inv) {
 		StackInfo[] stacks = new StackInfo[inv.size()];
 		for (int i = 0; i < inv.size(); i++) {
 			stacks[i] = new StackInfo(inv.getStack(i));
+		}
+		return stacks;
+	}
+
+	/**
+	 * @param inv The inventory being crafted in.
+	 * @return A 2D array of the stacks in the inventory.
+	 */
+	public static StackInfo[][] getInvStacks2d(CraftingInventory inv) {
+		StackInfo[][] stacks = new StackInfo[inv.getHeight()][];
+		for (int i = 0; i < inv.getHeight(); i++) {
+			stacks[i] = new StackInfo[inv.getWidth()];
+			for (int j = 0; j < inv.getWidth(); j++) {
+				stacks[i][j] = new StackInfo(inv.getStack(i * 3 + j));
+			}
 		}
 		return stacks;
 	}

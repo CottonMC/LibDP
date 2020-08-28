@@ -9,6 +9,7 @@ import java.util.concurrent.Executor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.github.cottonmc.libdp.LibDP;
+import io.github.cottonmc.libdp.api.DPSyntaxError;
 import io.github.cottonmc.libdp.api.Diskette;
 import io.github.cottonmc.libdp.api.driver.Driver;
 import io.github.cottonmc.libdp.api.driver.DriverManager;
@@ -38,7 +39,11 @@ public class DisketteLoader extends ScriptDataLoader<Diskette> {
 			for (Identifier id : diskettes.keySet()) {
 				Diskette script = diskettes.get(id);
 				if (!script.hasRun()) script.run();
-				if (!script.hadError()) loaded++;
+				if (script.hadError()) {
+					//should throw us into safe mode? Need to research more, may make DPSyntaxError runtime
+					throw new RuntimeException("Interrupting diskette loading due to script error!");
+				}
+				loaded++;
 			}
 			List<String> applied = new ArrayList<>();
 			for (Driver driver : DriverManager.INSTANCE.getDrivers()) {

@@ -4,6 +4,7 @@ import io.github.cottonmc.libdp.api.util.nbt.NbtUtils;
 import io.github.cottonmc.libdp.api.util.nbt.WrappedCompoundTag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
@@ -36,16 +37,29 @@ public class StackInfo {
 	}
 
 	/**
+	 * @return the raw code form of the stack's item.
+	 */
+	public Item getRawItem() {
+		return stack.getItem();
+	}
+
+	/**
 	 * @return The count of items in the stack.
 	 */
 	public int getCount() {
 		return stack.getCount();
 	}
 
+	/**
+	 * @return The max count of the item the stack is of.
+	 */
 	public int getMaxCount() {
 		return stack.getMaxCount();
 	}
 
+	/**
+	 * @return Whether the item is stackable.
+	 */
 	public boolean isStackable() {
 		return stack.isStackable();
 	}
@@ -64,14 +78,23 @@ public class StackInfo {
 		return stack.getDamage();
 	}
 
+	/**
+	 * @return The max amount of damage this item can take.
+	 */
 	public int getMaxDamage() {
 		return stack.getMaxDamage();
 	}
 
+	/**
+	 * @return Whether the item can be damaged.
+	 */
 	public boolean isDamageable() {
 		return stack.isDamageable();
 	}
 
+	/**
+	 * @return Whether the item has any damage.
+	 */
 	public boolean isDamaged() {
 		return stack.isDamaged();
 	}
@@ -105,4 +128,8 @@ public class StackInfo {
 		return new WrappedCompoundTag(stack.getOrCreateTag());
 	}
 
+	@Override
+	public String toString() {
+		return stack.toString();
+	}
 }

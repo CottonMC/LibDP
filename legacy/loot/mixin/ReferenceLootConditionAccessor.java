@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(ReferenceLootCondition.class)
 public interface ReferenceLootConditionAccessor {
-    @Invoker("<init>")
-    static ReferenceLootCondition callConstructor(Identifier id) {
-        throw new AssertionError();
-    }
+	@Invoker("<init>")
+	static ReferenceLootCondition callConstructor(Identifier id) {
+		throw new AssertionError();
+	}
 }

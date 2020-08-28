@@ -40,7 +40,7 @@ dependencies {
 	include "io.github.cottonmc:Parchment:${project.parchment_version}"
 	include "io.github.cottonmc:LibCD:${project.libcd_version}"
 
-	modCompileOnly ("com.github.Siphalor:nbt-crafting:1.16-2.0-SNAPSHOT") { transitive = false }
+//	modCompileOnly ("com.github.Siphalor:nbt-crafting:1.16-2.0-SNAPSHOT") { transitive = false }
 //	modRuntime ("com.github.Siphalor:nbt-crafting:1.16-2.0-SNAPSHOT") { transitive = false } //only for testing
 }
 

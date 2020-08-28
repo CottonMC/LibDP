@@ -16,13 +16,13 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 public class CustomShapedRecipe extends ShapedRecipe {
-	private Diskette bridge;
-	private Logger logger;
+	private final Diskette diskette;
+	private final Logger logger;
 
-	public CustomShapedRecipe(Diskette bridge, Identifier id, String group, int width, int height, DefaultedList<Ingredient> ingredients, ItemStack output) {
+	public CustomShapedRecipe(Diskette diskette, Identifier id, String group, int width, int height, DefaultedList<Ingredient> ingredients, ItemStack output) {
 		super(id, group, width, height, ingredients, output);
-		this.bridge = bridge;
-		this.logger = LogManager.getLogger(bridge.getId().toString());
+		this.diskette = diskette;
+		this.logger = LogManager.getLogger(diskette.getId().toString());
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class CustomShapedRecipe extends ShapedRecipe {
 		if (!matches) return false;
 		try {
 			PlayerEntity player = CraftingUtils.findPlayer(inv);
-			Object result = bridge.invokeFunction("matches", CraftingUtils.getInvStacks(inv), inv.getWidth(), inv.getHeight(), player != null? new WrappedPlayer(player) : DummyPlayer.INSTANCE, new WorldInfo(world));
+			Object result = diskette.invokeFunction("matches", CraftingUtils.getInvStacks2d(inv), inv.getWidth(), inv.getHeight(), player != null? new WrappedPlayer(player) : DummyPlayer.INSTANCE, new WorldInfo(world));
 			if (result instanceof Boolean) return (Boolean) result;
 			else {
 				logger.error("Could not check match for custom shaped recipe {}, returning standard match: function 'matches' must return a boolean, but returned {} instead", getId(), result.getClass().getName());
@@ -49,7 +49,8 @@ public class CustomShapedRecipe extends ShapedRecipe {
 		try {
 			MutableStack mutableStack = new MutableStack(stack);
 			PlayerEntity player = CraftingUtils.findPlayer(inv);
-			Object result = bridge.invokeFunction("preview", CraftingUtils.getInvStacks(inv), inv.getWidth(), inv.getHeight(), player != null? new WrappedPlayer(player) : DummyPlayer.INSTANCE, mutableStack );			return result == null? mutableStack.get() : RecipeParser.processItemStack(result);
+			Object result = diskette.invokeFunction("preview", CraftingUtils.getInvStacks2d(inv), inv.getWidth(), inv.getHeight(), player != null? new WrappedPlayer(player) : DummyPlayer.INSTANCE, mutableStack );
+			return result == null? mutableStack.get() : RecipeParser.processItemStack(result);
 		} catch (Exception e) {
 			logger.error("Could not get preview output for custom shaped recipe {}, returning standard output: {}", getId(), e.getMessage());
 			return super.craft(inv);
@@ -61,9 +62,9 @@ public class CustomShapedRecipe extends ShapedRecipe {
 		DefaultedList<ItemStack> remainingStacks = super.getRemainingStacks(inv);
 		try {
 			PlayerEntity player = CraftingUtils.findPlayer(inv);
-			bridge.invokeFunction("craft", CraftingUtils.getInvStacks(inv), player != null? new WrappedPlayer(player) : DummyPlayer.INSTANCE, new StackInfo(craft(inv)));
+			diskette.invokeFunction("craft", CraftingUtils.getInvStacks2d(inv), player != null? new WrappedPlayer(player) : DummyPlayer.INSTANCE, new StackInfo(craft(inv)));
 		} catch (Exception e) {
-			logger.error("Could not fully craft custom shaped recipe %s, ignoring: %s", getId(), e.getMessage());
+			logger.error("Could not fully craft custom shaped recipe {}, ignoring: {}", getId(), e.getMessage());
 		}
 		return remainingStacks;
 	}

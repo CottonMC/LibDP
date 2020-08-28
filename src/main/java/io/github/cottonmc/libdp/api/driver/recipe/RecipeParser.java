@@ -51,8 +51,11 @@ public class RecipeParser {
 				((IngredientAccessUtils) (Object) ing).libdp$setMatchType(NbtMatchType.EXACT);
 			}
 			return ing;
-		}
-		else if (input instanceof ItemStack) {
+		} else if (input instanceof Item) {
+			return Ingredient.ofItems((Item) input);
+		} else if (input instanceof Item[]) {
+			return Ingredient.ofItems((Item[]) input);
+		} else if (input instanceof ItemStack) {
 			ItemStack stack = (ItemStack) input;
 			Ingredient ing = hackStackIngredients(stack);
 			if (stack.hasTag()) {
@@ -102,7 +105,7 @@ public class RecipeParser {
 				stacks.add(stack);
 				type = NbtMatchType.EXACT;
 			} else {
-				Item item = DriverUtils.INSTANCE.getItem(in);
+				Item item = DriverUtils.INSTANCE.getRawItem(in);
 				if (item == Items.AIR) throw new DPSyntaxError("Failed to get item for input: " + in);
 				stacks.add(new ItemStack(item));
 			}
@@ -123,6 +126,7 @@ public class RecipeParser {
 	public static ItemStack processItemStack(Object input) throws DPSyntaxError {
 		if (input instanceof ItemStack) return (ItemStack) input;
 		else if (input instanceof MutableStack) return ((MutableStack) input).get();
+		else if (input instanceof Item) return (new ItemStack((Item) input));
 		else if (input instanceof String) {
 			String in = (String) input;
 			int atIndex = in.lastIndexOf('@');
@@ -152,7 +156,7 @@ public class RecipeParser {
 				}
 				return stack;
 			} else {
-				item = DriverUtils.INSTANCE.getItem(in);
+				item = DriverUtils.INSTANCE.getRawItem(in);
 			}
 
 			ItemStack stack = new ItemStack(item, count);

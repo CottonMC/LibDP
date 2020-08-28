@@ -10,7 +10,7 @@
     "MixinIngredient",
     "MixinPlayerScreenHandler",
     "MixinRecipeManager",
-    "MixinResourceManagerImpl",
-    "ReferenceLootConditionAccessor"
+    "MixinRecipeSyncPacket",
+    "MixinResourceManagerImpl"
   ]
 }
