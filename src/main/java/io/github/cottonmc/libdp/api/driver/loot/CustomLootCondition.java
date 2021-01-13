@@ -5,8 +5,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import io.github.cottonmc.libdp.LibDP;
 import io.github.cottonmc.libdp.api.Diskette;
-import io.github.cottonmc.libdp.api.util.loot.WrappedLootContext;
+import io.github.cottonmc.libdp.api.util.WrappedLootContext;
 import io.github.cottonmc.libdp.loader.DisketteLoader;
+import io.github.cottonmc.libdp.loader.NullDiskette;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.context.LootContext;
@@ -28,7 +29,7 @@ public class CustomLootCondition implements LootCondition {
 
 	@Override
 	public boolean test(LootContext context) {
-		Diskette diskette = DisketteLoader.DISKETTES.get(disketteId);
+		Diskette diskette = DisketteLoader.DISKETTES.getOrDefault(disketteId, NullDiskette.INSTANCE);
 		Object result = diskette.invokeFunction("test", new WrappedLootContext(context));
 		if (result instanceof Boolean) return (boolean) result;
 		LibDP.LOGGER.error("Could not test custom loot condition {}, returning false: function 'test' must return a boolean, but returned {} instead", disketteId, result.getClass().getName());

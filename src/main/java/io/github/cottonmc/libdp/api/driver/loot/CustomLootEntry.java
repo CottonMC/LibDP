@@ -6,8 +6,9 @@ import io.github.cottonmc.libdp.LibDP;
 import io.github.cottonmc.libdp.api.DPSyntaxError;
 import io.github.cottonmc.libdp.api.Diskette;
 import io.github.cottonmc.libdp.api.driver.recipe.RecipeParser;
-import io.github.cottonmc.libdp.api.util.loot.WrappedLootContext;
+import io.github.cottonmc.libdp.api.util.WrappedLootContext;
 import io.github.cottonmc.libdp.loader.DisketteLoader;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
@@ -42,8 +43,17 @@ public class CustomLootEntry extends LeafEntry {
 					LibDP.LOGGER.error("Cannot parse item stack from loot generator in {}: {}", disketteId, e.getMessage());
 				}
 			}
-		} else if (result instanceof List) {
-			for (Object obj : (List) result) {
+		} else if (result instanceof Iterable) {
+			for (Object obj : (Iterable) result) {
+				try {
+					generated.add(RecipeParser.processItemStack(obj));
+				} catch (DPSyntaxError e) {
+					LibDP.LOGGER.error("Cannot parse item stack from loot generator in {}: {}", disketteId, e.getMessage());
+				}
+			}
+			//TODO: add a sanitizer system to Parchment
+		} else if (result instanceof ScriptObjectMirror && ((ScriptObjectMirror) result).isArray()) { //uuuuuggggghhhhh fuck you nashorn why do I have to hardcode this
+			for (Object obj : ((ScriptObjectMirror) result).values()) {
 				try {
 					generated.add(RecipeParser.processItemStack(obj));
 				} catch (DPSyntaxError e) {

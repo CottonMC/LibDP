@@ -1,8 +1,5 @@
-package io.github.cottonmc.libdp.api.util.loot;
+package io.github.cottonmc.libdp.api.util;
 
-import io.github.cottonmc.libdp.api.util.MutableStack;
-import io.github.cottonmc.libdp.api.util.WorldInfo;
-import io.github.cottonmc.libdp.api.util.WrappedPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;

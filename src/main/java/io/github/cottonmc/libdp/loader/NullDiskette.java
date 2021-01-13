@@ -26,8 +26,8 @@ public class NullDiskette extends Diskette {
 	@Nullable
 	@Override
 	public Object invokeFunction(String funcName, Object... args) {
-		if (funcName.equals("matches")) return false;
-		if (funcName.equals("preview") || funcName.equals("craft")) return ItemStack.EMPTY;
+		if (funcName.equals("matches") || funcName.equals("test")) return false;
+		if (funcName.equals("preview") || funcName.equals("craft") || funcName.equals("apply") || funcName.equals("generateLoot")) return ItemStack.EMPTY;
 		return null;
 	}
 }

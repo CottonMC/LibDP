@@ -8,7 +8,7 @@ import io.github.cottonmc.libdp.api.DPSyntaxError;
 import io.github.cottonmc.libdp.api.Diskette;
 import io.github.cottonmc.libdp.api.driver.recipe.RecipeParser;
 import io.github.cottonmc.libdp.api.util.MutableStack;
-import io.github.cottonmc.libdp.api.util.loot.WrappedLootContext;
+import io.github.cottonmc.libdp.api.util.WrappedLootContext;
 import io.github.cottonmc.libdp.loader.DisketteLoader;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
