@@ -51,8 +51,9 @@ public class CustomLootEntry extends LeafEntry {
 					LibDP.LOGGER.error("Cannot parse item stack from loot generator in {}: {}", disketteId, e.getMessage());
 				}
 			}
-			//TODO: add a sanitizer system to Parchment
-		} else if (result instanceof ScriptObjectMirror && ((ScriptObjectMirror) result).isArray()) { //uuuuuggggghhhhh fuck you nashorn why do I have to hardcode this
+			//uuuuuggggghhhhh fuck you nashorn why do I have to hardcode this
+			//TODO: add a sanitizer system to Parchment, especially because java 15 kills nashorn
+		} else if (result instanceof ScriptObjectMirror && ((ScriptObjectMirror) result).isArray()) {
 			for (Object obj : ((ScriptObjectMirror) result).values()) {
 				try {
 					generated.add(RecipeParser.processItemStack(obj));
